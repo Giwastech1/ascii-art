@@ -21,9 +21,7 @@ func AsciiArt(str string) string {
 
 	content := string(standardAscii)
 	lines := strings.Split(content, "\n")
-
 	inputParts := strings.Split(str, "\\n")
-
 	if len(str) <= 0 {
 		return ""
 	}
