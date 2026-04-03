@@ -6,57 +6,34 @@ import (
 	"strings"
 )
 
-func AsciiArt(str string) string {
-	font := "utils/standard.ascii"
-	if len(os.Args) == 3 {
-		fontArgs := os.Args[2]
-		font = HandleFont(fontArgs)
-	}
-
-	standardAscii, err := os.ReadFile(font)
+func AsciiArt(s string) string {
+	standardAscii, err := os.ReadFile("utils/standard.ascii")
 	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
+		fmt.Printf("Error reading files: %v\n",err)
 		return ""
 	}
-
 	content := string(standardAscii)
-	lines := strings.Split(content, "\n")
-	inputParts := strings.Split(str, "\\n")
-	if len(str) <= 0 {
-		return ""
-	}
+	bannerLine := strings.Split(content,"\n")
+	inputPart := strings.Split(s,"\\n")
 
-	result := ""
-
-	onlyNewLine := str == "\\n"
-
-	if onlyNewLine {
-		return "\n"
-	}
-
-	for _, part := range inputParts {
-		if part == "" {
-			if len(inputParts) > 1 {
-				result += "\n"
-			}
+	var AsciiArt strings.Builder
+	for _, word := range inputPart{
+		if word == ""{
+			AsciiArt.WriteString("\n")
 			continue
 		}
-		if part == " " {
-			result += " "
-			continue
-		}
-		for row := 0; row < 8; row++ {
-			for _, char := range part {
-				charLines := GetCharLines(char, lines)
-				result += charLines[row]
+		for i := range 8 {
+			for _, char := range word {
+				line := getLines(char,bannerLine)
+				AsciiArt.WriteString(line[i])
 			}
-			result += "\n"
+			AsciiArt.WriteString("\n")
 		}
 	}
-	return result
+	return AsciiArt.String()
 }
 
-func GetCharLines(char rune, lines []string) []string {
-	startLine := ((char - 32) * 9) + 1
-	return lines[startLine : startLine+8]
+func getLines(char rune, lines []string) []string {
+	startLine := ((char - 32) * 9) +1
+	return lines[startLine:startLine+8]
 }
